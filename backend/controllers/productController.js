@@ -1,12 +1,12 @@
-import { asyncHandler } from "../middleware/asyncHandler";
-import Product from "../models/productModel";
+import { asyncHandler } from "../middleware/asyncHandler.js";
+import Product from "../models/productModel.js";
 
-export const getProducts = asyncHandler(async (res, res) => {
+export const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
 });
 
-export const getProductById = asyncHandler(async (res, res) => {
+export const getProductById = asyncHandler(async (req, res) => {
   const products = await Product.findById(req.params.id);
   if (products) {
     res.json(products);
