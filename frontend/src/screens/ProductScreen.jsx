@@ -45,7 +45,7 @@ const ProductScreen = () => {
       })
     );
 
-    // navigate("/cart");
+    navigate("/cart");
   };
 
   return (
