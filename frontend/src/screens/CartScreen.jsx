@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
-import { addToCart } from "../slices/cartSlice";
+import { addToCart, removeFromCart } from "../slices/cartSlice";
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -14,6 +14,14 @@ const CartScreen = () => {
 
   const addToCartHandler = (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const handleCheckout = () => {
+    navigate("/login?redirect=/shipping");
   };
 
   return (
@@ -56,7 +64,11 @@ const CartScreen = () => {
                         </Form.Control>
                       </Col>
                       <Col md={2}>
-                        <Button type="button" variant="light">
+                        <Button
+                          type="button"
+                          variant="light"
+                          onClick={() => handleRemove(item._id)}
+                        >
                           <FaTrash />
                         </Button>
                       </Col>
@@ -84,7 +96,11 @@ const CartScreen = () => {
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button disabled={cartItems.length === 0} className="btn-block">
+              <Button
+                onClick={handleCheckout}
+                disabled={cartItems.length === 0}
+                className="btn-block"
+              >
                 Proceed to cart
               </Button>
             </ListGroup.Item>
