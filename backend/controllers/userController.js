@@ -7,7 +7,19 @@ import User from "../models/userModel.js";
  * @route GET /api/user/login
  */
 export const authUser = asyncHandler(async (req, res) => {
-  res.send("auth user");
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      isAdmin: user.isAdmin,
+      email: user.email,
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
 });
 
 /**
