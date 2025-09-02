@@ -57,6 +57,7 @@ export const logOutUser = asyncHandler(async (req, res) => {
  * @route GET /api/users/profile
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
+  console.log("Hi");
   res.send("Get user profile");
 });
 
