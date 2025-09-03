@@ -48,6 +48,7 @@ export const registerUser = asyncHandler(async (req, res) => {
  * @route POST /api/users/logout
  */
 export const logOutUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", { httpOnly: true, maxAge: new Date(0) });
   res.send("Logout user");
 });
 
@@ -57,7 +58,6 @@ export const logOutUser = asyncHandler(async (req, res) => {
  * @route GET /api/users/profile
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
-  console.log("Hi");
   res.send("Get user profile");
 });
 
