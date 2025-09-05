@@ -1,6 +1,6 @@
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../utils/generateToken.js";
 
 /**
  * @description Auth user and get token
@@ -11,16 +11,7 @@ export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 1 * 24 * 60 * 60 * 1000,
-    });
+    generateToken(res, user._id);
     res.json({
       _id: user._id,
       name: user.name,
@@ -39,7 +30,27 @@ export const authUser = asyncHandler(async (req, res) => {
  * @route POST /api/users
  */
 export const registerUser = asyncHandler(async (req, res) => {
-  res.send("register user");
+  const { name, email, password } = req.body;
+  // check if user exists
+  const user = await User.findOne({ email: email });
+  if (user) {
+    throw new Error("User already exist");
+  }
+  const savedUser = await User.create({
+    name,
+    email,
+    password,
+  });
+  if (savedUser) {
+    generateToken(res, savedUser._id);
+
+    res.status(201).json({
+      name: savedUser.name,
+      email: savedUser.email,
+      _id: savedUser._id,
+      isAdmin: savedUser.isAdmin,
+    });
+  }
 });
 
 /**
