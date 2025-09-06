@@ -84,8 +84,19 @@ export const getUserProfile = asyncHandler(async (req, res) => {
  */
 export const updateUserProfile = asyncHandler(async (req, res) => {
   let user = await User.findById(req.user._id);
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
 
-  res.send("UPdate user profile");
+  if (req.body.password) {
+    user.password = req.body.password;
+  }
+
+  const updatedUserData = await user.save();
+
+  res.status(200).json({
+    name: updatedUserData.name,
+    email: updatedUserData.email,
+  });
 });
 
 /**
