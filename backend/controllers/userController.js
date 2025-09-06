@@ -69,7 +69,12 @@ export const logOutUser = asyncHandler(async (req, res) => {
  * @route GET /api/users/profile
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
-  res.send("Get user profile");
+  const user = await User.findById(req.user._id);
+  res.status(200).json({
+    name: user.name,
+    email: user.email,
+    isAdming: user.isAdmin,
+  });
 });
 
 /**
@@ -78,6 +83,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
  * @route PUT /api/users/profile
  */
 export const updateUserProfile = asyncHandler(async (req, res) => {
+  let user = await User.findById(req.user._id);
+
   res.send("UPdate user profile");
 });
 
