@@ -10,12 +10,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getProduct: builder.query({
-      query: (id) => ({
-        url: `${USERS_URL}/${id}`,
-      }),
-      keepUnusedDataFor: 5,
-    }),
   }),
 });
 
