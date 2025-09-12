@@ -60,7 +60,7 @@ export const registerUser = asyncHandler(async (req, res) => {
  */
 export const logOutUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", { httpOnly: true, maxAge: new Date(0) });
-  res.send("Logout user");
+  res.json({ msg: "Logging out user" });
 });
 
 /**
