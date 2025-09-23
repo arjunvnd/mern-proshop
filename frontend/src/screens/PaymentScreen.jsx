@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("PayPal");
   const navigate = useNavigate();
   const { shippingAddress } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const PaymentScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(savePaymentMethod());
+    dispatch(savePaymentMethod(paymentMethod));
     navigate("/place-order");
   };
 
@@ -38,7 +38,7 @@ const PaymentScreen = () => {
               label="Paypal or Credit card"
               id="paypal"
               name="paymentMethod"
-              value="paypal"
+              value="PayPal"
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
