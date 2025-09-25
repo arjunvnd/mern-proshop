@@ -8,7 +8,37 @@ import Order from "../models/orderModel.js";
  */
 
 export const addOrderItems = asyncHandler(async (req, res) => {
-  res.send("Add order items");
+  const {
+    orderItems,
+    paymentMethod,
+    itemsPrice,
+    taxPrice,
+    totalPrice,
+    shippingPrice,
+  } = req.body;
+
+  if (orderItems && orderItems.length === 0) {
+    res.status(400);
+    throw new Error("No order item");
+  } else {
+    const order = new Order({
+      orderItems: orderItems.map((item) => {
+        return {
+          ...item,
+          product: item._id,
+          _id: undefined,
+        };
+      }),
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      totalPrice,
+      shippingPrice,
+      user: req.user._id,
+    });
+    const createdOrder = await order.save();
+    res.status(201).json(createdOrder);
+  }
 });
 
 /**
@@ -18,7 +48,8 @@ export const addOrderItems = asyncHandler(async (req, res) => {
  */
 
 export const getMyOrders = asyncHandler(async (req, res) => {
-  res.send("Get my order");
+  const orders = await Order.find({ user: req.user._id });
+  res.status(200).json(orders);
 });
 
 /**
@@ -28,7 +59,16 @@ export const getMyOrders = asyncHandler(async (req, res) => {
  */
 
 export const getOrderById = asyncHandler(async (req, res) => {
-  res.send("Get order by id");
+  const orders = await Order.findById({ user: req.params.id }).populate(
+    "user",
+    "name email"
+  );
+  if (order) {
+    res.status(200).json(orders);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
 });
 
 /**
