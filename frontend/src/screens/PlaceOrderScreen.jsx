@@ -41,6 +41,7 @@ const PlaceOrderScreen = () => {
         taxPrice,
         totalPrice,
         shippingPrice,
+        shippingAddress,
       }).unwrap();
       dispatch(clearCart());
       navigate(`/order/${res._id}`);

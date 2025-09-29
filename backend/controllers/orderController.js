@@ -59,15 +59,19 @@ export const getMyOrders = asyncHandler(async (req, res) => {
  */
 
 export const getOrderById = asyncHandler(async (req, res) => {
-  const orders = await Order.findById({ user: req.params.id }).populate(
-    "user",
-    "name email"
-  );
-  if (order) {
-    res.status(200).json(orders);
-  } else {
-    res.status(404);
-    throw new Error("Order not found");
+  try {
+    const orders = await Order.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
+    if (orders) {
+      res.status(200).json(orders);
+    } else {
+      res.status(404);
+      throw new Error("Order not found");
+    }
+  } catch (error) {
+    throw new Error("Something went wrong");
   }
 });
 
